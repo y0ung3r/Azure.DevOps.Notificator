@@ -1,9 +1,18 @@
 using BotFramework.Extensions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
-services.AddControllers();
+services.AddControllers()
+		.AddNewtonsoftJson(options =>
+		{
+			var serializerSettings = options.SerializerSettings;
+			serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+			serializerSettings.Formatting = Formatting.None;
+			serializerSettings.NullValueHandling = NullValueHandling.Ignore;
+		});
 
 services.AddEndpointsApiExplorer()
         .AddSwaggerGen();
@@ -11,8 +20,9 @@ services.AddEndpointsApiExplorer()
 services.AddBotFramework();
 
 var application = builder.Build();
+var environment = application.Environment;
 
-if (application.Environment.IsDevelopment())
+if (environment.IsDevelopment())
 {
     application.UseSwagger()
                .UseSwaggerUI();
