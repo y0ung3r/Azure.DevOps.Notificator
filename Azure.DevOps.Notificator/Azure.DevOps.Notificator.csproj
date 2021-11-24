@@ -8,7 +8,13 @@
 
     <ItemGroup>
         <PackageReference Include="BotFramework.NET" Version="2.1.7" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Types\Code\Events\PullRequests" />
+      <Folder Include="Types\WorkItems\Events" />
     </ItemGroup>
 
 </Project>
