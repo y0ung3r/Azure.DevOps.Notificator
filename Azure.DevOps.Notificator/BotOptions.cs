@@ -3,7 +3,7 @@ namespace Azure.DevOps.Notificator;
 /// <summary>
 /// Параметры бота
 /// </summary>
-public class BotConfiguration
+public class BotOptions
 {
 	/// <summary>
 	/// Telegram API Token

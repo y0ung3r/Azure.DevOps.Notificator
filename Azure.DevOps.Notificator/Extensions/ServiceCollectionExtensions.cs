@@ -2,6 +2,7 @@ using Azure.DevOps.Notificator.Handlers;
 using BotFramework.Extensions;
 using BotFramework.Interfaces;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using EventHandler = Azure.DevOps.Notificator.Handlers.EventHandler;
@@ -20,12 +21,25 @@ public static class ServiceCollectionExtensions
 	/// <param name="services">Сервисы</param>
 	/// <param name="token">Токен от Telegram Bot API</param>
 	/// <param name="configureBranch">Конфигуратор для цепочки обработчиков</param>
-	public static IServiceCollection AddNotifier(this IServiceCollection services, string token, string chatId,
+	public static IServiceCollection AddNotifier(this IServiceCollection services,
+												IConfiguration configuration,
 												Action<IBranchBuilder> configureBranch)
 	{
-		services.TryAddScoped<ITelegramBotClient>(_ => new TelegramBotClient(token));
+		services.Configure<BotOptions>(configuration.GetSection("Bot"));
 
-		services.TryAddScoped(_ => new ChatId(chatId));
+		services.TryAddScoped<ITelegramBotClient>(serviceProvider =>
+		{
+			var options = serviceProvider.GetService<IOptions<BotOptions>>();
+
+			return new TelegramBotClient(options.Value.Token);
+		});
+
+		services.TryAddScoped(serviceProvider =>
+		{
+			var options = serviceProvider.GetService<IOptions<BotOptions>>();
+
+			return new ChatId(options.Value.ChatId);
+		});
 
 		services.AddBotFramework()
 			.AddHandler<ExceptionHandler>()

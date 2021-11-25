@@ -1,6 +1,5 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Azure.DevOps.Notificator;
 using Azure.DevOps.Notificator.Extensions;
 using Azure.DevOps.Notificator.Handlers;
 using BotFramework.Extensions;
@@ -19,12 +18,7 @@ services.AddControllers()
 services.AddEndpointsApiExplorer()
 	.AddSwaggerGen();
 
-var _botConfiguration = builder.Configuration
-	.GetSection("Bot")
-	.Get<BotConfiguration>();
-
-services.AddNotifier(_botConfiguration.Token,
-	_botConfiguration.ChatId,
+services.AddNotifier(builder.Configuration,
 	branchBuilder => branchBuilder.UseHandler<ExceptionHandler>()
 		.UseHandler<EventHandler>());
 
