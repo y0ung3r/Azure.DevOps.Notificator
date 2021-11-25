@@ -1,4 +1,4 @@
-namespace Azure.DevOps.Notificator.Types.Code.Events.PullRequests;
+namespace Azure.DevOps.Notificator.Types.Events.Code.PullRequests;
 
 public class PullRequestMergeCommitCreated
 {

@@ -1,8 +1,6 @@
-using Azure.DevOps.Notificator.Types.Code.Events.Checked;
+namespace Azure.DevOps.Notificator.Types.Events.Code.Checked;
 
-namespace Azure.DevOps.Notificator.Types.Code.Events;
-
-public class Pushed
+public class CodeCheckedIn
 {
     public Guid? Id { get; set; }
 
@@ -16,7 +14,7 @@ public class Pushed
 
     public Message DetailedMessage { get; set; }
 
-    public CheckedInResource Resource { get; set; }
+    public CodeCheckedInResource Resource { get; set; }
 
     public string ResourceVersion { get; set; }
 

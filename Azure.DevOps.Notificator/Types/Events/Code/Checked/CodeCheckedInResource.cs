@@ -1,6 +1,6 @@
-namespace Azure.DevOps.Notificator.Types.Code.Events.Checked;
+namespace Azure.DevOps.Notificator.Types.Events.Code.Checked;
 
-public class CheckedInResource : Resource
+public class CodeCheckedInResource : Resource
 {
     public Author Author { get; set; }
 
