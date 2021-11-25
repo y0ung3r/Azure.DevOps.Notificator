@@ -33,7 +33,10 @@ public class BotController : ControllerBase
     [HttpPost(template:"GetUpdates")]
     public async Task<IActionResult> Post([FromBody] Event devOpsEvent)
     {
-        _logger?.LogInformation($"Событие с типом \"{devOpsEvent.EventType}\" получено и отправлено в цепочку обработчиков");
+        if (_logger.IsEnabled(LogLevel.Information))
+        {
+            _logger.LogInformation("Событие с типом \"{EventType}\" получено и отправлено в цепочку обработчиков", devOpsEvent.EventType);    
+        }
 
         await _branch(devOpsEvent);
 

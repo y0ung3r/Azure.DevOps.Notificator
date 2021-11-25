@@ -34,13 +34,18 @@ public class EventHandler : RequestHandlerBase<Event>
     /// <param name="nextHandler">Следующий обработчик по цепочке</param>
     public override Task HandleAsync(Event request, RequestDelegate nextHandler)
     {
-        _logger?.LogInformation($"Отправка информации о событии \"{request.EventType}\" Telegram боту в чат с идентификатором {_chatId}");
-        
+        if (_logger.IsEnabled(LogLevel.Information))
+        {
+            _logger.LogInformation(
+                "Отправка информации о событии \"{EventType}\" Telegram боту в чат с идентификатором {ChatId}",
+                request.EventType, _chatId);
+        }
+
         return _client.SendTextMessageAsync
         (
-            _chatId, 
-            request.DetailedMessage.Html, 
+            _chatId,
+            request.DetailedMessage.Html,
             ParseMode.Html
         );
-    } 
+    }
 }

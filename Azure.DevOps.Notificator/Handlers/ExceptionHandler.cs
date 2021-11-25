@@ -19,7 +19,7 @@ public class ExceptionHandler : RequestHandlerBase<Event>
     {
         _logger = logger;
     }
-    
+
     /// <summary>Передает запрос следующему обработчику по цепочке и логгирует исключения в случае их появления</summary>
     /// <param name="request">Запрос</param>
     /// <param name="nextHandler">Следующий обработчик по цепочке</param>
@@ -29,10 +29,10 @@ public class ExceptionHandler : RequestHandlerBase<Event>
         {
             await nextHandler(request);
         }
-        
+
         catch (Exception error)
         {
-            _logger?.LogWarning($"Невозможно обработать запрос: {error.Message}");
+            _logger?.LogError(error, "Невозможно обработать запрос: {ExceptionMessage}", error.Message);
         }
     }
 }
