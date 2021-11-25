@@ -1,7 +1,13 @@
+using Azure.DevOps.Notificator.Types.Events.WorkItems;
+
 namespace Azure.DevOps.Notificator.Types;
 
 public class Resource
 {
+	public long? Id { get; set; }
+	
+	public long? Rev { get; set; }
+	
 	public long? PullRequestId { get; set; }
 
 	public string Status { get; set; }
@@ -47,4 +53,12 @@ public class Resource
 	public long? PushId { get; set; }
 	
 	public DateTimeOffset? Date { get; set; }
+	
+	public ResourceDistribution Fields { get; set; }
+	
+	public LinkDistribution Links { get; set; }
+	
+	public Author RevisedBy { get; set; }
+	
+	public DateTimeOffset? RevisedDate { get; set; }
 }
