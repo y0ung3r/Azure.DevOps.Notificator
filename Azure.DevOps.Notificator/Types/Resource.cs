@@ -1,5 +1,3 @@
-using Azure.DevOps.Notificator.Types.Events.WorkItems;
-
 namespace Azure.DevOps.Notificator.Types;
 
 public class Resource
@@ -9,6 +7,14 @@ public class Resource
 	public long? Rev { get; set; }
 	
 	public long? PullRequestId { get; set; }
+	
+	public Author Author { get; set; }
+
+	public Author CheckedInBy { get; set; }
+
+	public DateTimeOffset? CreatedDate { get; set; }
+
+	public string Comment { get; set; }
 
 	public string Status { get; set; }
 

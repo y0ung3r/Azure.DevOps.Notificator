@@ -1,5 +1,3 @@
-using Azure.DevOps.Notificator.Types.Events.WorkItems;
-
 namespace Azure.DevOps.Notificator.Types;
 
 public class Revision

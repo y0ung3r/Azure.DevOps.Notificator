@@ -1,23 +1,35 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Azure.DevOps.Notificator;
+using Azure.DevOps.Notificator.Extensions;
+using Azure.DevOps.Notificator.Handlers;
 using BotFramework.Extensions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using EventHandler = Azure.DevOps.Notificator.Handlers.EventHandler;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddControllers()
-		.AddNewtonsoftJson(options =>
+		.AddJsonOptions(options =>
 		{
-			var serializerSettings = options.SerializerSettings;
-			serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-			serializerSettings.Formatting = Formatting.None;
-			serializerSettings.NullValueHandling = NullValueHandling.Ignore;
+			options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+			options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 		});
 
 services.AddEndpointsApiExplorer()
         .AddSwaggerGen();
 
-services.AddBotFramework();
+var _botConfiguration = builder.Configuration
+							   .GetSection("Bot")
+							   .Get<BotConfiguration>();
+
+services.AddNotifier
+(
+	_botConfiguration.Token,
+	_botConfiguration.ChatId,
+	branchBuilder => branchBuilder.UseHandler<ExceptionHandler>()
+								  .UseHandler<EventHandler>()
+);
 
 var application = builder.Build();
 var environment = application.Environment;
@@ -28,8 +40,12 @@ if (environment.IsDevelopment())
                .UseSwaggerUI();
 }
 
-application.UseHttpsRedirection();
+application.UseHttpsRedirection()
+		   .UseRouting();
 
-application.MapControllers();
+application.UseEndpoints(endpoints =>
+{
+	endpoints.MapControllers();
+});
 
 application.Run();
