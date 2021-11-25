@@ -10,38 +10,35 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddControllers()
-		.AddJsonOptions(options =>
-		{
-			options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-			options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-		});
+	.AddJsonOptions(options =>
+	{
+		options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+		options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+	});
 
 services.AddEndpointsApiExplorer()
-        .AddSwaggerGen();
+	.AddSwaggerGen();
 
 var _botConfiguration = builder.Configuration
-							   .GetSection("Bot")
-							   .Get<BotConfiguration>();
+	.GetSection("Bot")
+	.Get<BotConfiguration>();
 
-services.AddNotifier
-(
-	_botConfiguration.Token,
+services.AddNotifier(_botConfiguration.Token,
 	_botConfiguration.ChatId,
 	branchBuilder => branchBuilder.UseHandler<ExceptionHandler>()
-								  .UseHandler<EventHandler>()
-);
+		.UseHandler<EventHandler>());
 
 var application = builder.Build();
 var environment = application.Environment;
 
 if (environment.IsDevelopment())
 {
-    application.UseSwagger()
-               .UseSwaggerUI();
+	application.UseSwagger()
+		.UseSwaggerUI();
 }
 
 application.UseHttpsRedirection()
-		   .UseRouting();
+	.UseRouting();
 
 application.UseEndpoints(endpoints =>
 {

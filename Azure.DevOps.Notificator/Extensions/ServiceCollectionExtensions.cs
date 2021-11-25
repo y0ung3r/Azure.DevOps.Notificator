@@ -14,40 +14,32 @@ namespace Azure.DevOps.Notificator.Extensions;
 /// </summary>
 public static class ServiceCollectionExtensions
 {
-    /// <summary>
-    /// Конфигурирует текущее приложение
-    /// </summary>
-    /// <param name="services">Сервисы</param>
-    /// <param name="token">Токен от Telegram Bot API</param>
-    /// <param name="configureBranch">Конфигуратор для цепочки обработчиков</param>
-    public static IServiceCollection AddNotifier(this IServiceCollection services, string token, string chatId, Action<IBranchBuilder> configureBranch)
-    {
-        services.TryAddScoped<ITelegramBotClient>
-        (
-            _ => new TelegramBotClient(token)
-        );
-        
-        services.TryAddScoped
-        (
-            _ => new ChatId(chatId)
-        );
-        
-        services.AddBotFramework()
-                .AddHandler<ExceptionHandler>()
-                .AddHandler<EventHandler>();
+	/// <summary>
+	/// Конфигурирует текущее приложение
+	/// </summary>
+	/// <param name="services">Сервисы</param>
+	/// <param name="token">Токен от Telegram Bot API</param>
+	/// <param name="configureBranch">Конфигуратор для цепочки обработчиков</param>
+	public static IServiceCollection AddNotifier(this IServiceCollection services, string token, string chatId,
+												Action<IBranchBuilder> configureBranch)
+	{
+		services.TryAddScoped<ITelegramBotClient>(_ => new TelegramBotClient(token));
 
-        services.TryAddScoped<RequestDelegate>
-        (
-            serviceProvider =>
-            {
-                var branchBuilder = serviceProvider.GetRequiredService<IBranchBuilder>();
+		services.TryAddScoped(_ => new ChatId(chatId));
 
-                configureBranch(branchBuilder);
+		services.AddBotFramework()
+			.AddHandler<ExceptionHandler>()
+			.AddHandler<EventHandler>();
 
-                return branchBuilder.Build();
-            }
-        );
+		services.TryAddScoped<RequestDelegate>(serviceProvider =>
+		{
+			var branchBuilder = serviceProvider.GetRequiredService<IBranchBuilder>();
 
-        return services;
-    }
+			configureBranch(branchBuilder);
+
+			return branchBuilder.Build();
+		});
+
+		return services;
+	}
 }

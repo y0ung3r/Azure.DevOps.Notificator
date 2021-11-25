@@ -8,38 +8,38 @@ namespace Azure.DevOps.Notificator.Controllers;
 [Route("[controller]")]
 public class BotController : ControllerBase
 {
-    private readonly ILogger<BotController> _logger;
- 
-    /// <summary>
-    /// Сконфигурированная ветвь обработчиков
-    /// </summary>
-    private readonly RequestDelegate _branch;
+	private readonly ILogger<BotController> _logger;
 
-    /// <summary>
-    /// Базовый конструктор
-    /// </summary>
-    /// <param name="logger"></param>
-    /// <param name="branchBuilder"></param>
-    public BotController(ILogger<BotController> logger, RequestDelegate branch)
-    {
-        _logger = logger;
-        _branch = branch;
-    }
+	/// <summary>
+	/// Сконфигурированная ветвь обработчиков
+	/// </summary>
+	private readonly RequestDelegate _branch;
 
-    /// <summary>
-    /// Принимает Azure DevOps событие по вебхуку
-    /// </summary>
-    /// <param name="devOpsEvent">Объект события</param>
-    [HttpPost(template:"GetUpdates")]
-    public async Task<IActionResult> Post([FromBody] Event devOpsEvent)
-    {
-        if (_logger.IsEnabled(LogLevel.Information))
-        {
-            _logger.LogInformation("Событие с типом \"{EventType}\" получено и отправлено в цепочку обработчиков", devOpsEvent.EventType);    
-        }
+	/// <summary>
+	/// Базовый конструктор
+	/// </summary>
+	/// <param name="logger"></param>
+	/// <param name="branchBuilder"></param>
+	public BotController(ILogger<BotController> logger, RequestDelegate branch)
+	{
+		_logger = logger;
+		_branch = branch;
+	}
 
-        await _branch(devOpsEvent);
+	/// <summary>
+	/// Принимает Azure DevOps событие по вебхуку
+	/// </summary>
+	/// <param name="devOpsEvent">Объект события</param>
+	[HttpPost(template: "GetUpdates")]
+	public async Task<IActionResult> Post([FromBody] Event devOpsEvent)
+	{
+		if (_logger.IsEnabled(LogLevel.Information))
+		{
+			_logger.LogInformation("Событие с типом \"{EventType}\" получено и отправлено в цепочку обработчиков", devOpsEvent.EventType);
+		}
 
-        return Ok();
-    }
+		await _branch(devOpsEvent);
+
+		return Ok();
+	}
 }
