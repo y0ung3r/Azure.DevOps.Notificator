@@ -2,7 +2,7 @@ namespace Azure.DevOps.Notificator.Types;
 
 public class Author
 {
-	public Guid? Id { get; set; }
+	public string Id { get; set; }
 
 	public object ReviewerUrl { get; set; }
 
