@@ -44,7 +44,7 @@ public class EventHandler : RequestHandlerBase<Event>
 		}
 
 		return _client.SendTextMessageAsync(_chatId,
-			request.DetailedMessage.Html,
-			ParseMode.Html);
+			request.DetailedMessage.Text,
+			ParseMode.Markdown);
 	}
 }
