@@ -18,7 +18,7 @@ public class Event
 
 	public string ResourceVersion { get; set; }
 
-	public ResourceDistribution ResourceDistribution { get; set; }
+	public ResourceDistribution ResourceContainers { get; set; }
 
 	public DateTimeOffset? CreatedDate { get; set; }
 }
