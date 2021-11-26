@@ -1,6 +1,6 @@
-namespace Azure.DevOps.Notificator.Types.Events.Code.PullRequests;
+namespace Azure.DevOps.Notificator.Types;
 
-public class PullRequestMergeCommitCreated
+public class Event
 {
 	public Guid? Id { get; set; }
 
@@ -18,7 +18,7 @@ public class PullRequestMergeCommitCreated
 
 	public string ResourceVersion { get; set; }
 
-	public ResourceDistribution ResourceDistribution { get; set; }
+	public ResourceDistribution ResourceContainers { get; set; }
 
 	public DateTimeOffset? CreatedDate { get; set; }
 }
