@@ -1,5 +1,5 @@
-using Azure.DevOps.Notificator.Types;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Services.ServiceHooks.WebApi;
 using RequestDelegate = BotFramework.RequestDelegate;
 
 namespace Azure.DevOps.Notificator.Controllers;
@@ -31,8 +31,18 @@ public class BotController : ControllerBase
 	/// </summary>
 	/// <param name="devOpsEvent">Объект события</param>
 	[HttpPost(template: "GetUpdates")]
-	public async Task<IActionResult> Post([FromBody] Event devOpsEvent)
+	public async Task<IActionResult> Post([FromBody] Event? devOpsEvent)
 	{
+		if (devOpsEvent is null)
+		{
+			if (_logger.IsEnabled(LogLevel.Error))
+			{
+				_logger.LogError("Событие не распарсилось");
+			}
+
+			return BadRequest();
+		}
+
 		if (_logger.IsEnabled(LogLevel.Information))
 		{
 			_logger.LogInformation("Событие с типом \"{EventType}\" получено и отправлено в цепочку обработчиков", devOpsEvent.EventType);

@@ -1,5 +1,5 @@
-using Azure.DevOps.Notificator.Types;
 using BotFramework.Handlers.Common;
+using Microsoft.VisualStudio.Services.ServiceHooks.WebApi;
 using RequestDelegate = BotFramework.RequestDelegate;
 
 namespace Azure.DevOps.Notificator.Handlers;

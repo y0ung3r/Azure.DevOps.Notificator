@@ -1,5 +1,5 @@
-using Azure.DevOps.Notificator.Types;
 using BotFramework.Handlers.Common;
+using Microsoft.VisualStudio.Services.ServiceHooks.WebApi;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
