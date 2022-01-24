@@ -1,35 +1,43 @@
+using Azure.DevOps.Notificator.Extensions;
+using Azure.DevOps.Notificator.Handlers;
 using BotFramework.Extensions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
+using EventHandler = Azure.DevOps.Notificator.Handlers.EventHandler;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
-services.AddControllers()
-		.AddNewtonsoftJson(options =>
-		{
-			var serializerSettings = options.SerializerSettings;
-			serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-			serializerSettings.Formatting = Formatting.None;
-			serializerSettings.NullValueHandling = NullValueHandling.Ignore;
-		});
+services.AddControllers();
+
+services.Configure<ApiBehaviorOptions>(options =>
+{
+	options.SuppressModelStateInvalidFilter = true;
+});
 
 services.AddEndpointsApiExplorer()
-        .AddSwaggerGen();
+	.AddSwaggerGen();
 
-services.AddBotFramework();
+services.AddNotifier(builder.Configuration,
+	branchBuilder => branchBuilder.UseHandler<ExceptionHandler>()
+		.UseHandler<EventHandler>());
 
 var application = builder.Build();
 var environment = application.Environment;
 
 if (environment.IsDevelopment())
 {
-    application.UseSwagger()
-               .UseSwaggerUI();
+	application.UseDeveloperExceptionPage()
+		.UseSwagger()
+		.UseSwaggerUI();
 }
 
-application.UseHttpsRedirection();
+application.UseHttpsRedirection()
+	.UseRouting()
+	.UseCors();
 
-application.MapControllers();
+application.UseEndpoints(endpoints =>
+{
+	endpoints.MapControllers();
+});
 
 application.Run();
