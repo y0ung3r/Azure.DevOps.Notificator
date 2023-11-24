@@ -1,3 +1,3 @@
-# EventNotificator
+# AzureEventNotificator
 
-Веб-приложение для перенаправления событий Azure DevOps в бот Telegram  
+Web application for redirecting `Azure DevOps` events to `Telegram` bot 
